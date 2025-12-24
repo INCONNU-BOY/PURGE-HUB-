@@ -19,7 +19,7 @@ import Getallstories from "./Hooks/Getallstories";
 import Search from "./Pages/Search";
 import Message from "./Pages/message";
 import Textarea from "./Pages/Textarea";
-export const serverUrl = "http://localhost:8000";
+export const serverUrl = "https://vybe-geyh.onrender.com";
 import { io, Socket } from "socket.io-client";
 import { setonlineuser, setsocket } from "./redux/SocketSlice";
 import Getallfollowing from "./Hooks/Getallfollowing";
