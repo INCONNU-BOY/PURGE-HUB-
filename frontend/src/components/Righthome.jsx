@@ -1,5 +1,5 @@
 import React from "react";
-import Message from "../Pages/message";
+import Message from "../Pages/Message";
 
 function Righthome() {
   return (
