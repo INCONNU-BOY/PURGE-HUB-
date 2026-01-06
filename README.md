@@ -79,10 +79,10 @@ Vybe is a **full-stack social media web application inspired by Instagram**, bui
 ## 📸 Screenshots
 
 ### 💻 Desktop View
-*(Add desktop screenshots here)*
+![image alt](https://github.com/gaurav152003/Vybe/blob/main/Screenshot%202026-01-06%20121041.png)
 
 ### 📱 Mobile View
-*(Add mobile screenshots here)*
+![image alt](https://github.com/gaurav152003/Vybe/blob/main/mobile.jpeg)
 
 ---
 
