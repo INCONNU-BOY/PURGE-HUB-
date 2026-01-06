@@ -97,13 +97,3 @@ Vybe is a **full-stack social media web application inspired by Instagram**, bui
 
 ---
 
-## 🎯 Resume-Ready Description
-
-```text
-Vybe – Instagram Clone | MERN Stack
-• Built a full-stack social media platform with posts, reels, stories, messaging, likes, comments, and saved posts
-• Implemented secure JWT authentication and protected routes
-• Designed REST APIs using Express.js and MongoDB
-• Managed global application state using Redux Toolkit
-• Handled image and video uploads using Multer
-• Deployed the application on Render
