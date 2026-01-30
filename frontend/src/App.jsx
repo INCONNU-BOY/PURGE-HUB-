@@ -19,7 +19,7 @@ import Getallstories from "./Hooks/Getallstories";
 import Search from "./Pages/Search";
 import Message from "./Pages/Message";
 import Textarea from "./Pages/Textarea";
-export const serverUrl = "https://incon-0c93f4ae5b7b.herokuapp.com";
+export const serverUrl = "https://purge-hub-backend.onrender.com";
 import { io, Socket } from "socket.io-client";
 import { setonlineuser, setsocket } from "./redux/SocketSlice";
 import Getallfollowing from "./Hooks/Getallfollowing";
