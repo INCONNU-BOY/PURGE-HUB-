@@ -19,15 +19,17 @@ import Getallstories from "./Hooks/Getallstories";
 import Search from "./Pages/Search";
 import Message from "./Pages/Message";
 import Textarea from "./Pages/Textarea";
-export const serverUrl = "https://vybe-geyh.onrender.com";
-import { io, Socket } from "socket.io-client";
+import { io } from "socket.io-client";
 import { setonlineuser, setsocket } from "./redux/SocketSlice";
 import Getallfollowing from "./Hooks/Getallfollowing";
 import Getallpreviouschatuser from "./Hooks/Getallpreviouschatuser";
 import Getallnotification from "./Hooks/Getallnotification";
 import Notification from "./Pages/Notification";
-import Feed from "./components/Feed";
 import { setnotificationdata } from "./redux/UserSlice";
+
+/* ✅ SERVER URL (via .env recommandé) */
+export const serverUrl = import.meta.env.VITE_SERVER_URL;
+// ex: https://purge-hub-backend.onrender.com
 
 function App() {
   Getcurrentuser();
@@ -38,34 +40,37 @@ function App() {
   Getallfollowing();
   Getallpreviouschatuser();
   Getallnotification();
+
   const { userData, notificationdata } = useSelector((state) => state.user);
   const { socket } = useSelector((state) => state.socket);
   const dispatch = useDispatch();
 
+  /* 🔌 SOCKET CONNECTION */
   useEffect(() => {
-    if (userData) {
-      const socketIo = io(`${serverUrl}`, {
-        query: { userId: userData._id },
-      });
+    if (!userData) return;
 
-      dispatch(setsocket(socketIo));
+    const socketIo = io(serverUrl, {
+      query: { userId: userData._id },
+      transports: ["websocket"],
+    });
 
-      socketIo.on("getOnlineUsers", (users) => {
-        dispatch(setonlineuser(users));
-      });
+    dispatch(setsocket(socketIo));
 
-      return () => socketIo.close();
-    } else {
-      if (socket) {
-        socket.close();
-        dispatch(setsocket(null));
-      }
-    }
-  }, [userData]);
+    socketIo.on("getOnlineUsers", (users) => {
+      dispatch(setonlineuser(users));
+    });
 
-  socket?.on("newnotification", (noti) => {
-    dispatch(setnotificationdata([...notificationdata, noti]));
-  });
+    socketIo.on("newnotification", (noti) => {
+      dispatch(setnotificationdata((prev) => [...prev, noti]));
+    });
+
+    return () => {
+      socketIo.off("getOnlineUsers");
+      socketIo.off("newnotification");
+      socketIo.disconnect();
+      dispatch(setsocket(null));
+    };
+  }, [userData, dispatch]);
 
   return (
     <>
@@ -73,55 +78,55 @@ function App() {
       <Routes>
         <Route
           path="/signup"
-          element={!userData ? <Signup /> : <Navigate to={"/"} />}
+          element={!userData ? <Signup /> : <Navigate to="/" />}
         />
         <Route
-          path="/Signin"
-          element={!userData ? <Signin /> : <Navigate to={"/"} />}
+          path="/signin"
+          element={!userData ? <Signin /> : <Navigate to="/" />}
         />
         <Route
           path="/"
-          element={userData ? <Home /> : <Navigate to={"/signin"} />}
+          element={userData ? <Home /> : <Navigate to="/signin" />}
         />
         <Route
           path="/forgotpassword"
-          element={!userData ? <Forgotpassword /> : <Navigate to={"/"} />}
+          element={!userData ? <Forgotpassword /> : <Navigate to="/" />}
         />
         <Route
           path="/profile/:username"
-          element={userData ? <Profile /> : <Navigate to={"/"} />}
+          element={userData ? <Profile /> : <Navigate to="/signin" />}
         />
         <Route
           path="/editprofile"
-          element={userData ? <Editprofile /> : <Navigate to={"/"} />}
+          element={userData ? <Editprofile /> : <Navigate to="/signin" />}
         />
         <Route
           path="/upload"
-          element={userData ? <Upload /> : <Navigate to={"/signin"} />}
+          element={userData ? <Upload /> : <Navigate to="/signin" />}
         />
         <Route
           path="/loop"
-          element={userData ? <Loops /> : <Navigate to={"/signin"} />}
+          element={userData ? <Loops /> : <Navigate to="/signin" />}
         />
         <Route
           path="/story/:username"
-          element={userData ? <Story /> : <Navigate to={"/signin"} />}
+          element={userData ? <Story /> : <Navigate to="/signin" />}
         />
         <Route
           path="/search"
-          element={userData ? <Search /> : <Navigate to={"/signin"} />}
+          element={userData ? <Search /> : <Navigate to="/signin" />}
         />
         <Route
           path="/message"
-          element={userData ? <Message /> : <Navigate to={"/signin"} />}
+          element={userData ? <Message /> : <Navigate to="/signin" />}
         />
         <Route
           path="/textarea"
-          element={userData ? <Textarea /> : <Navigate to={"/signin"} />}
+          element={userData ? <Textarea /> : <Navigate to="/signin" />}
         />
         <Route
           path="/notification"
-          element={userData ? <Notification /> : <Navigate to={"/signin"} />}
+          element={userData ? <Notification /> : <Navigate to="/signin" />}
         />
       </Routes>
     </>
